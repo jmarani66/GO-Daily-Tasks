@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -157,8 +156,7 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	loadTasks()
-	fs := http.FileServer(http.Dir("./frontend"))
-	http.Handle("/", fs)
+	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 	http.HandleFunc("/api/tasks", tasksHandler)
 	http.HandleFunc("/api/tasks/", taskHandler)
 
