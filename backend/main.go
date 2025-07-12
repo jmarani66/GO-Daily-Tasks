@@ -154,10 +154,18 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
+func loggingMiddleware(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Request: %s %s", r.Method, r.URL.Path)
+		h.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	loadTasks()
 
-	http.Handle("/", http.FileServer(http.Dir("./frontend/")))
+	fs := http.FileServer(http.Dir("./frontend"))
+	http.Handle("/", loggingMiddleware(fs))
 
 	http.HandleFunc("/api/tasks", tasksHandler)
 	http.HandleFunc("/api/tasks/", taskHandler)
