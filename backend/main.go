@@ -156,7 +156,9 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	loadTasks()
-	http.Handle("/", http.FileServer(http.Dir("./frontend")))
+
+	http.Handle("/", http.FileServer(http.Dir("./frontend/")))
+
 	http.HandleFunc("/api/tasks", tasksHandler)
 	http.HandleFunc("/api/tasks/", taskHandler)
 
